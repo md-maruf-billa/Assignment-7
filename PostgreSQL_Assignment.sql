@@ -7,7 +7,7 @@ CREATE TABLE books (
     author VARCHAR(50) NOT NULL,
     price DECIMAL(10,2) CHECK (price >= 0) NOT NULL,
     stock INT CHECK (stock >= 0) NOT NULL,
-    published_year VARCHAR(6)  NOT NULL
+    published_year INT  NOT NULL
 );
 
 
@@ -78,4 +78,43 @@ INSERT INTO orders (customer_id, book_id, quantity) VALUES
 (4, 2, 2),
 (5, 4, 1);
 
+
+
+-- Problem-1
+SELECT * FROM books
+    WHERE stock =0;
+
+--Problem-2
+SELECT * FROM books
+      ORDER BY price desc
+      LIMIT 1;
+
+--Problem-3
+SELECT customers.name , count(orders.id) as total_orders FROM customers
+JOIN orders on customers.id = orders.customer_id
+GROUP BY customers.id;
+
+--Problem-4
+SELECT sum(books.price * orders.quantity) as total_revenue from orders
+JOIN books on books.id = orders.book_id;
+
+--Problem-5
+SELECT customers.name , count(orders.id) as orders_count FROM customers
+      join orders on customers.id = orders.customer_id
+      GROUP BY customers.id
+      HAVING count(orders.id) >1;
+
+--Problem-6
+SELECT round(avg(price) ,2) as avg_book_price from books ;
+
+--Problem-7
+update books
+      set price = price*1.10
+      WHERE  published_year < 2000;
+
+
+
+--Problem-8
+DELETE FROM customers
+      WHERE id not in (SELECT DISTINCT customer_id from orders)
 
